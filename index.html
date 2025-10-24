@@ -167,25 +167,52 @@
     /* 解释部分样式 */
     .explanation-content {
       background-color: #f8f9fa;
-      border-left: 4px solid #003366;
+      border: 1px solid #ddd;
+      border-radius: 6px;
       padding: 20px;
-      border-radius: 0 8px 8px 0;
+      max-height: 500px;
+      overflow-y: auto;
     }
 
     .explanation-content h3 {
       color: #003366;
       margin-top: 0;
       margin-bottom: 1rem;
+      font-size: 1.2rem;
     }
 
     .explanation-point {
-      margin-bottom: 1rem;
-      padding-left: 1rem;
-      border-left: 2px solid #3498db;
+      margin-bottom: 1.5rem;
+      padding: 15px;
+      background-color: white;
+      border-radius: 4px;
+      border-left: 3px solid #3498db;
     }
 
     .explanation-point strong {
       color: #2c3e50;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    /* 滚动条样式 */
+    .explanation-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .explanation-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    .explanation-content::-webkit-scrollbar-thumb {
+      background: #3498db;
+      border-radius: 3px;
+    }
+
+    .explanation-content::-webkit-scrollbar-thumb:hover {
+      background: #2980b9;
     }
 
     footer {
@@ -222,7 +249,8 @@
         max-width: 100%;
       }
       
-      .prompt-content {
+      .prompt-content,
+      .explanation-content {
         max-height: 300px;
       }
     }
@@ -266,15 +294,26 @@
         
         <div class="explanation-column">
             <div class="explanation-content">
-                <h3>Framework Architecture</h3>
+                <h3>Algorithm Explanation</h3>
                 <p>Algorithm 1 outlines the full procedure for VIAS, consisting of an initialization stage where a Q-network is pre-trained using LLM-generated heuristic values, followed by a standard deep Q-learning phase enhanced with ongoing LLM-based shaping.</p>
                 
                 <div class="explanation-point">
-                    In the <strong>Initialization Phase</strong> (Lines 1–7), we begin by setting up an empty initial replay buffer D0. This buffer is used to store observation-action pairs along with their corresponding heuristic values obtained from the LLM before training. For each observation-action pair (o, a) collected before the training starts, the algorithm queries the LLM to obtain a heuristic value f . This heuristic value represents the LLM’s estimated cumulative reward for taking action a in observation o. The tuple (o, a, f ) is then stored in the initial replay buffer D0. Subsequently, the algorithm initializes the Q-value function Q(o, a; θ) by minimizing the pre-training loss function L0(θ).
+                    <strong>Initialization Phase (Lines 1–7)</strong>
+                    We begin by setting up an empty initial replay buffer D₀. This buffer is used to store observation-action pairs along with their corresponding heuristic values obtained from the LLM before training. For each observation-action pair (o, a) collected before the training starts, the algorithm queries the LLM to obtain a heuristic value f. This heuristic value represents the LLM's estimated cumulative reward for taking action a in observation o. The tuple (o, a, f) is then stored in the initial replay buffer D₀. Subsequently, the algorithm initializes the Q-value function Q(o, a; θ) by minimizing the pre-training loss function L₀(θ).
                 </div>
 
                 <div class="explanation-point">
-                    In the <strong>Training Phase</strong> (Lines 9–23), we train the agent over T timesteps. As in the initialization phase, VIAS initializes a replay buffer D. At each time step within an episode, the agent selects an action a based on the current Q-values Q(o, a). This selection is typically performed using a policy derived from Q, such as the ϵ-greedy policy. In our experiment, we used a decayed ϵ-greedy policy over timesteps. The selected action a is then executed in the environment, resulting in the observation of an immediate reward r and the next observation o′. Querying the LLM to obtain a heuristic value f for the current observation-action pair, the agent stores the experience in the replay buffer D. A mini-batch of experiences is then sampled from the replay buffer D for training, using prioritized experience replay. The Q-value Q(o, a) is then updated by incorporating both the TD error and the heuristic adjustment from the LLM. When the agent achieves the goal, the environment is initialized by setting the initial observation o.
+                    <strong>Training Phase (Lines 9–23)</strong>
+                    We train the agent over T timesteps. As in the initialization phase, VIAS initializes a replay buffer D. At each time step within an episode, the agent selects an action a based on the current Q-values Q(o, a). This selection is typically performed using a policy derived from Q, such as the ϵ-greedy policy. In our experiment, we used a decayed ϵ-greedy policy over timesteps. The selected action a is then executed in the environment, resulting in the observation of an immediate reward r and the next observation o′. Querying the LLM to obtain a heuristic value f for the current observation-action pair, the agent stores the experience in the replay buffer D. A mini-batch of experiences is then sampled from the replay buffer D for training, using prioritized experience replay. The Q-value Q(o, a) is then updated by incorporating both the TD error and the heuristic adjustment from the LLM. When the agent achieves the goal, the environment is initialized by setting the initial observation o.
+                </div>
+
+                <div class="explanation-point">
+                    <strong>Key Components</strong>
+                    • <strong>LLM Integration:</strong> Uses language models as external critics to provide heuristic values<br>
+                    • <strong>Value Shaping:</strong> Augments TD loss with linguistic guidance<br>
+                    • <strong>Adaptive Updates:</strong> Periodic LLM queries maintain relevance<br>
+                    • <strong>Sample Efficiency:</strong> Informed initialization accelerates learning<br>
+                    • <strong>Prioritized Replay:</strong> Focuses learning on valuable experiences
                 </div>
             </div>
         </div>
@@ -387,23 +426,28 @@ Previous Action: {action}"
             <p>The Q-value evaluation prompt is carefully designed to elicit structured numerical responses from the LLM that can be directly integrated into the reinforcement learning framework.</p>
             
             <div class="explanation-point">
-              <strong>Structured Output Format:</strong> The prompt explicitly requests dictionary-formatted outputs with numeric values between 0.0 and 1.0, ensuring compatibility with the RL algorithm.
+              <strong>Structured Output Format</strong>
+              The prompt explicitly requests dictionary-formatted outputs with numeric values between 0.0 and 1.0, ensuring compatibility with the RL algorithm.
             </div>
 
             <div class="explanation-point">
-              <strong>Commonsense Reasoning:</strong> The prompt encourages the LLM to apply spatial and task-specific reasoning, leveraging its world knowledge to estimate action values.
+              <strong>Commonsense Reasoning</strong>
+              The prompt encourages the LLM to apply spatial and task-specific reasoning, leveraging its world knowledge to estimate action values.
             </div>
 
             <div class="explanation-point">
-              <strong>Action Constraints:</strong> Explicit constraints about object manipulation (e.g., "must be near to grab", "must be holding to put back") guide the LLM's reasoning process.
+              <strong>Action Constraints</strong>
+              Explicit constraints about object manipulation (e.g., "must be near to grab", "must be holding to put back") guide the LLM's reasoning process.
             </div>
 
             <div class="explanation-point">
-              <strong>Template-based Observation:</strong> The observation template provides a standardized format for state representation, ensuring consistent prompt formatting across different scenarios.
+              <strong>Template-based Observation</strong>
+              The observation template provides a standardized format for state representation, ensuring consistent prompt formatting across different scenarios.
             </div>
 
             <div class="explanation-point">
-              <strong>Example-driven Learning:</strong> Including examples helps the LLM understand the expected response format and reasoning pattern.
+              <strong>Example-driven Learning</strong>
+              Including examples helps the LLM understand the expected response format and reasoning pattern.
             </div>
           </div>
         </div>
@@ -441,23 +485,28 @@ Previous Action: {action}"
             <p>These examples demonstrate how the LLM provides value estimates based on linguistic understanding of the task context and commonsense reasoning.</p>
             
             <div class="explanation-point">
-              <strong>Context-Aware Valuation:</strong> The LLM considers the complete context including current location, held objects, and goal specification when estimating action values.
+              <strong>Context-Aware Valuation</strong>
+              The LLM considers the complete context including current location, held objects, and goal specification when estimating action values.
             </div>
 
             <div class="explanation-point">
-              <strong>Goal-Oriented Reasoning:</strong> Actions are evaluated based on their relevance to achieving the specified goal, with high values assigned to goal-relevant actions.
+              <strong>Goal-Oriented Reasoning</strong>
+              Actions are evaluated based on their relevance to achieving the specified goal, with high values assigned to goal-relevant actions.
             </div>
 
             <div class="explanation-point">
-              <strong>Task Decomposition:</strong> The LLM implicitly understands task hierarchies, recognizing that certain actions (like navigation) are prerequisites for others (like object placement).
+              <strong>Task Decomposition</strong>
+              The LLM implicitly understands task hierarchies, recognizing that certain actions (like navigation) are prerequisites for others (like object placement).
             </div>
 
             <div class="explanation-point">
-              <strong>Error Prevention:</strong> By assigning low values to irrelevant or impossible actions, the LLM helps prevent the RL agent from exploring unpromising directions.
+              <strong>Error Prevention</strong>
+              By assigning low values to irrelevant or impossible actions, the LLM helps prevent the RL agent from exploring unpromising directions.
             </div>
 
             <div class="explanation-point">
-              <strong>Adaptive Guidance:</strong> The linguistic Q-values provide adaptive guidance that evolves as the task context changes, offering more nuanced direction than fixed reward functions.
+              <strong>Adaptive Guidance</strong>
+              The linguistic Q-values provide adaptive guidance that evolves as the task context changes, offering more nuanced direction than fixed reward functions.
             </div>
           </div>
         </div>
