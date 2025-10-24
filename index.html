@@ -141,60 +141,6 @@
       </p>
     </section>
 
-    <div class="card" id="algorithm-card">
-    <h2>Algorithm — VIAS (Value Initialization and Adaptive Shaping)</h2>
-    <p class="meta">Pseudo-code of the proposed VIAS framework, showing both initialization and training phases with LLM-guided value shaping.</p>
-
-    <pre><code>Input:
-    Observation space 𝒪, action space 𝒜
-    Discount factor γ, learning rate α
-      Heuristic weight β, total timesteps T
-  
-    ---------------------------------------------
-    Initialization Phase
-    ---------------------------------------------
-    1. Initialize replay buffer 𝓓₀
-    2. For each randomly generated observation oᵢ:
-          Query LLM with oᵢ and candidate actions to obtain heuristic values f
-          Store (oᵢ, a, _, _, f) in 𝓓₀
-    3. Pre-train Q(o, a; θ) using supervised regression on 𝓓₀
-    
-    ---------------------------------------------
-    Training Phase
-    ---------------------------------------------
-    4. Initialize environment and main replay buffer 𝓓
-    5. For t = 1 to T:
-          Select action a using ε-greedy policy from Q and execute it
-          Observe reward r and next observation o′
-          If t mod M = 0:
-              Query LLM to obtain updated heuristic f
-          Store (o, a, r, o′, f) in 𝓓
-          Sample mini-batch from 𝓓 using prioritized experience replay
-          Update Q using TD loss augmented with heuristic shaping
-          o ← o′
-          If episode done:
-              Reset environment
-    </code></pre>
-
-    <button class="btn" id="toggleAlgExplain">显示/隐藏 算法解释</button>
-  
-    <div class="explain" id="algExplain">
-      <h3 style="color:var(--accent); margin-top:10px;">算法解释</h3>
-      <p>
-
-    
-    <section>
-      <h2>Figures and Explanations</h2>
-      <img src="images/architecture.png" alt="Architecture Diagram" />
-      <p class="caption">Figure 1. Overview of the VIAS framework combining RL and LLM-based value shaping.</p>
-
-      <img src="images/results_comparison.png" alt="Results Comparison" />
-      <p class="caption">Figure 2. Learning curves comparison among TDQN, LLM-guided RL, and VIAS.</p>
-      <p>
-        The figures above visualize the proposed architecture and the learning performance comparison. VIAS achieves faster convergence and higher stability across tasks, highlighting the importance of linguistic feedback in value estimation.
-      </p>
-    </section>
-    
     
     <!-- Table 1 -->
     <section>
