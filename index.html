@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supplementary Materials - VIAS</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #003366;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    section {
+      margin-bottom: 3rem;
+    }
+
+    section h2 {
+      border-left: 4px solid #003366;
+      padding-left: 10px;
+      color: #003366;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+      text-align: justify;
+    }
+
+    iframe {
+      display: block;
+      margin: 1rem auto;
+      max-width: 100%;
+      border-radius: 8px;
+      border: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #003366;
+      color: white;
+    }
+
+    img {
+      display: block;
+      margin: 1rem auto;
+      max-width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .caption {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: -0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+      section h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Supplementary Materials for "Value Initialization and Adaptive Shaping (VIAS)"</h1>
+  </header>
+
+  <main>
+
+    <!-- Abstract -->
+    <section>
+      <h2>Abstract</h2>
+      <p>
+        Reinforcement Learning (RL) enables robots to learn complex tasks, but suffers from poor sample efficiency, especially in environments where language is used to describe goals and actions. While recent work has explored the integration of RL with large language models (LLMs), most methods focus on policy learning and overlook the potential of using the knowledge as structured feedback to guide value estimation. We present Value Initialization and Adaptive Shaping (VIAS), a framework that uses large language models as external critics to provide linguistic guidance for value estimation. VIAS enhances sample efficiency by using language for both informed initialization and value shaping during training. Evaluated on two robots and in VirtualHome environment, VIAS outperforms standard RL baselines in both learning speed and task completion, demonstrating its potential for real-world robot applications.
+      </p>
+    </section>
+
+    <!-- Video -->
+    <section>
+      <h2>Video Demonstration</h2>
+      <iframe width="720" height="405" src="https://www.youtube.com/embed/l7xpJGB_HDQ" allowfullscreen></iframe>
+      <p class="caption">Video 1. Demonstration of VIAS performance in robotic and VirtualHome environments.</p>
+      <p>
+        This video demonstrates the learning process and task completion results of the VIAS framework, showing improvements in sample efficiency and policy stability across multiple robot setups.
+      </p>
+    </section>
+
+    <!-- Table 1 -->
+    <section>
+      <h2>Table 1: Task Performance Results</h2>
+      <table>
+        <tr>
+          <th>Environment</th>
+          <th>Baseline (TDQN)</th>
+          <th>LLM-guided RL</th>
+          <th>VIAS (Ours)</th>
+        </tr>
+        <tr>
+          <td>BlocksWorld</td>
+          <td>72%</td>
+          <td>81%</td>
+          <td><b>89%</b></td>
+        </tr>
+        <tr>
+          <td>VirtualHome</td>
+          <td>64%</td>
+          <td>78%</td>
+          <td><b>87%</b></td>
+        </tr>
+        <tr>
+          <td>Robot Arm</td>
+          <td>58%</td>
+          <td>74%</td>
+          <td><b>85%</b></td>
+        </tr>
+      </table>
+      <p class="caption">Table 1. Comparison of task completion rates across different methods.</p>
+      <p>
+        VIAS achieves the highest task completion rate across all environments, demonstrating the effectiveness of integrating linguistic value guidance into reinforcement learning.
+      </p>
+    </section>
+
+    <!-- Table 2 -->
+    <section>
+      <h2>Table 2: Training Efficiency Comparison</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Episodes to Convergence</th>
+          <th>Sample Efficiency Improvement</th>
+        </tr>
+        <tr>
+          <td>TDQN</td>
+          <td>4500</td>
+          <td>–</td>
+        </tr>
+        <tr>
+          <td>LLM-Guided RL</td>
+          <td>3100</td>
+          <td>+31%</td>
+        </tr>
+        <tr>
+          <td>VIAS (Ours)</td>
+          <td><b>2200</b></td>
+          <td><b>+51%</b></td>
+        </tr>
+      </table>
+      <p class="caption">Table 2. VIAS improves training efficiency by using linguistic initialization and adaptive shaping.</p>
+    </section>
+
+    <!-- Images -->
+    <section>
+      <h2>Figures and Explanations</h2>
+      <img src="images/architecture.png" alt="Architecture Diagram" />
+      <p class="caption">Figure 1. Overview of the VIAS framework combining RL and LLM-based value shaping.</p>
+
+      <img src="images/results_comparison.png" alt="Results Comparison" />
+      <p class="caption">Figure 2. Learning curves comparison among TDQN, LLM-guided RL, and VIAS.</p>
+      <p>
+        The figures above visualize the proposed architecture and the learning performance comparison. VIAS achieves faster convergence and higher stability across tasks, highlighting the importance of linguistic feedback in value estimation.
+      </p>
+    </section>
+
+    <!-- Prompts -->
+    <section>
+      <h2>Prompt Examples and Explanation</h2>
+      <pre style="background:#f3f3f3; padding:1rem; border-radius:8px; overflow-x:auto;">
+Prompt: "Given the current state and goal, estimate the expected Q-value for action 'move block to table'."
+Response: "Based on prior tasks, moving the block is a high-value action when goal proximity > 0.8. Estimated Q-value ≈ 0.92."
+      </pre>
+      <p class="caption">Example of linguistic Q-value estimation prompt used in VIAS.</p>
+      <p>
+        Prompts are designed to encourage the LLM to provide structured value judgments rather than raw textual outputs. These linguistic Q-values are then integrated into the RL training loop for adaptive value shaping.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 VIAS Research Team — Supplementary Materials for ICRA Submission
+  </footer>
+</body>
+</html>
