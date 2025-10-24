@@ -425,96 +425,15 @@ Previous Action: {action}"
         <!-- 右边：解释 -->
         <div class="explanation-column">
           <div class="explanation-content">
-            <h3>Prompt Design Strategy</h3>
-            <p>The Q-value evaluation prompt is carefully designed to elicit structured numerical responses from the LLM that can be directly integrated into the reinforcement learning framework.</p>
+            <h3>Q-Value Evaluation Prompt</h3>
+            <p>We design a prompt in a way that the LLM can output estimated cumulative rewards instead of immediate rewards. The prompt also takes advantage of a natural language description of an environment, where the description can be one that the agent has not observed.</p>
             
-            <div class="explanation-point">
-              <strong>Structured Output Format</strong>
-              The prompt explicitly requests dictionary-formatted outputs with numeric values between 0.0 and 1.0, ensuring compatibility with the RL algorithm.
-            </div>
-
-            <div class="explanation-point">
-              <strong>Commonsense Reasoning</strong>
-              The prompt encourages the LLM to apply spatial and task-specific reasoning, leveraging its world knowledge to estimate action values.
-            </div>
-
-            <div class="explanation-point">
-              <strong>Action Constraints</strong>
-              Explicit constraints about object manipulation (e.g., "must be near to grab", "must be holding to put back") guide the LLM's reasoning process.
-            </div>
-
-            <div class="explanation-point">
-              <strong>Template-based Observation</strong>
-              The observation template provides a standardized format for state representation, ensuring consistent prompt formatting across different scenarios.
-            </div>
-
-            <div class="explanation-point">
-              <strong>Example-driven Learning</strong>
-              Including examples helps the LLM understand the expected response format and reasoning pattern.
-            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Prompt Examples -->
-    <section>
-      <h2>Prompt Examples and Explanation</h2>
-      <div class="two-column-layout">
-        <!-- 左边：Prompt示例 -->
-        <div class="prompt-column">
-          <div class="prompt-content">
-            <div class="prompt-title">Example Interaction</div>
-<b>Prompt:</b> "Given the current state and goal, Your task is to estimate Q-values for action 'move block to table'."
-
-<b>Response:</b> "Based on prior tasks, moving the block is a high-value action when goal proximity > 0.8. Estimated Q-value ≈ 0.92."
-
-<div class="prompt-title" style="margin-top: 20px;">Another Example</div>
-<b>State:</b> "Robot is in kitchen, holding a cup, goal is to place cup on table"
-<b>Prompt:</b> "Evaluate Q-value for 'walk to table' action"
-<b>Response:</b> "Since robot is holding the target object and needs to reach the destination, walking to table has high value. Q-value: 0.95"
-
-<div class="prompt-title" style="margin-top: 20px;">Low-value Example</div>
-<b>State:</b> "Robot is in bedroom, goal is to place plate on kitchen counter"
-<b>Prompt:</b> "Evaluate Q-value for 'grab wineglass' action"
-<b>Response:</b> "This action is unrelated to the current goal. Q-value: 0.1"
-          </div>
-        </div>
-        
-        <!-- 右边：解释 -->
-        <div class="explanation-column">
-          <div class="explanation-content">
-            <h3>Prompt-Response Analysis</h3>
-            <p>These examples demonstrate how the LLM provides value estimates based on linguistic understanding of the task context and commonsense reasoning.</p>
-            
-            <div class="explanation-point">
-              <strong>Context-Aware Valuation</strong>
-              The LLM considers the complete context including current location, held objects, and goal specification when estimating action values.
-            </div>
-
-            <div class="explanation-point">
-              <strong>Goal-Oriented Reasoning</strong>
-              Actions are evaluated based on their relevance to achieving the specified goal, with high values assigned to goal-relevant actions.
-            </div>
-
-            <div class="explanation-point">
-              <strong>Task Decomposition</strong>
-              The LLM implicitly understands task hierarchies, recognizing that certain actions (like navigation) are prerequisites for others (like object placement).
-            </div>
-
-            <div class="explanation-point">
-              <strong>Error Prevention</strong>
-              By assigning low values to irrelevant or impossible actions, the LLM helps prevent the RL agent from exploring unpromising directions.
-            </div>
-
-            <div class="explanation-point">
-              <strong>Adaptive Guidance</strong>
-              The linguistic Q-values provide adaptive guidance that evolves as the task context changes, offering more nuanced direction than fixed reward functions.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+  
   </main>
 
   <footer>
