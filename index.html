@@ -96,6 +96,50 @@
       margin-bottom: 1.5rem;
     }
 
+    /* 伪代码样式 */
+    .pseudocode {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    .algorithm-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: #003366;
+    }
+
+    .algorithm-line {
+      margin: 0.3rem 0;
+    }
+
+    .algorithm-keyword {
+      font-weight: bold;
+      color: #d73a49;
+    }
+
+    .algorithm-comment {
+      color: #6a737d;
+      font-style: italic;
+    }
+
+    .algorithm-label {
+      color: #6f42c1;
+      font-weight: bold;
+    }
+
+    .indent-1 { margin-left: 1rem; }
+    .indent-2 { margin-left: 2rem; }
+    .indent-3 { margin-left: 3rem; }
+
     footer {
       background-color: #003366;
       color: white;
@@ -111,6 +155,10 @@
       section h2 {
         font-size: 1.2rem;
       }
+      .pseudocode {
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
@@ -118,7 +166,7 @@
 <body>
   <header>
     <h1>Initializing and Shaping Robot Policies with Language-based Value Estimation</h1>
-    <h2>Appendixn</h2>
+    <h2>Appendix</h2>
   </header>
 
   <main>
@@ -128,6 +176,43 @@
       <h2>Abstract</h2>
       <p>
         Reinforcement Learning (RL) enables robots to learn complex tasks, but suffers from poor sample efficiency, especially in environments where language is used to describe goals and actions. While recent work has explored the integration of RL with large language models (LLMs), most methods focus on policy learning and overlook the potential of using the knowledge as structured feedback to guide value estimation. We present Value Initialization and Adaptive Shaping (VIAS), a framework that uses large language models as external critics to provide linguistic guidance for value estimation. VIAS enhances sample efficiency by using language for both informed initialization and value shaping during training. Evaluated on two robots and in VirtualHome environment, VIAS outperforms standard RL baselines in both learning speed and task completion, demonstrating its potential for real-world robot applications.
+      </p>
+    </section>
+
+    <!-- VIAS Algorithm -->
+    <section>
+      <h2>VIAS Algorithm Pseudocode</h2>
+      <div class="pseudocode">
+        <div class="algorithm-title">Algorithm 1: VIAS Algorithm</div>
+        <div class="algorithm-line"><span class="algorithm-keyword">REQUIRE</span>: Observation space $\mathcal{O}$, action space $\mathcal{A}$, discount factor $\gamma$, learning rate $\alpha$, heuristic weight $\beta$, total timesteps $T$</div>
+        
+        <div class="algorithm-line"><span class="algorithm-keyword">STATE</span> <span class="algorithm-label">Initialization Phase</span> <span class="algorithm-comment">// line:initialization_start</span></div>
+        <div class="algorithm-line indent-1"><span class="algorithm-keyword">STATE</span> Initialize replay buffer $\mathcal{D}_{0}$</div>
+        <div class="algorithm-line indent-1"><span class="algorithm-keyword">FOR</span> each randomly generated observation $o_{i}$</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Query LLM with $o_{i}$ and candidate actions to obtain heuristic values $f$</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Store $(o_{i}, a, \_, \_, f)$ in $\mathcal{D}_{0}$</div>
+        <div class="algorithm-line indent-1"><span class="algorithm-keyword">ENDFOR</span></div>
+        <div class="algorithm-line indent-1"><span class="algorithm-keyword">STATE</span> Pre-train $Q(o,a;\theta)$ using supervised regression on $\mathcal{D}_{0}$ <span class="algorithm-comment">// line:initialization_end</span></div>
+        <div class="algorithm-line indent-1"><span class="algorithm-keyword">STATE</span> Initialize environment and main replay buffer $\mathcal{D}$</div>
+        
+        <div class="algorithm-line"><span class="algorithm-keyword">STATE</span> <span class="algorithm-label">Training Phase</span> <span class="algorithm-comment">// line:training_start</span></div>
+        <div class="algorithm-line indent-1"><span class="algorithm-keyword">FOR</span> $t=1$ to $T$</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Select action $a$ using $\epsilon$-greedy policy from $Q$ and execute it</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Observe $r$, $o^{\prime}$</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">IF</span> $t\bmod M=0$</div>
+        <div class="algorithm-line indent-3"><span class="algorithm-keyword">STATE</span> Query LLM to obtain updated heuristic $f$</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">ENDIF</span></div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Store $(o,a,r,o^{\prime},f)$ in $\mathcal{D}$</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Sample mini-batch from $\mathcal{D}$ using prioritized experience replay</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Update $Q$ using TD loss augmented with heuristic shaping</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> $o\gets o^{\prime}$</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">IF</span> episode done</div>
+        <div class="algorithm-line indent-3"><span class="algorithm-keyword">STATE</span> Reset environment</div>
+        <div class="algorithm-line indent-2"><span class="algorithm-keyword">ENDIF</span></div>
+        <div class="algorithm-line indent-1"><span class="algorithm-keyword">ENDFOR</span> <span class="algorithm-comment">// line:training_end</span></div>
+      </div>
+      <p>
+        The VIAS algorithm consists of two main phases: <strong>Initialization Phase</strong> and <strong>Training Phase</strong>. In the initialization phase, the algorithm pre-trains the Q-function using heuristic values obtained from the LLM. During the training phase, it periodically queries the LLM for updated heuristic values and uses them to shape the TD loss, enabling more efficient reinforcement learning.
       </p>
     </section>
 
@@ -144,25 +229,23 @@
     <!-- Images -->
     <section>
       <h2>Figures and Explanations</h2>
-      <img src="algo.png" alt="a" />
+      <img src="algo.png" alt="VIAS Framework Overview" />
       <p class="caption">Figure 1. Overview of the VIAS framework combining RL and LLM-based value shaping.</p>
     </section>
 
-    
     <section>
       <h2>Figures and Explanations</h2>
-      <img src="para.png" alt="b" />
-      <p class="caption">Figure 2ing.</p>
+      <img src="para.png" alt="Parameter Analysis" />
+      <p class="caption">Figure 2. Parameter analysis and sensitivity studies.</p>
     </section>
-
-
 
     <section>
       <h2>Figures and Explanations</h2>
-      <img src="3d.png" alt="c" />
-      <p class="caption">Figure 3ue shaping.</p>
+      <img src="3d.png" alt="3D Visualization" />
+      <p class="caption">Figure 3. 3D visualization of the value shaping process.</p>
     </section>
 
+    <!-- Q-Value Evaluation Prompt -->
     <section>
       <h2>Q-Value Evaluation Prompt</h2>
       <div style="
@@ -175,7 +258,8 @@
         line-height: 1.5;
         overflow-x: auto;
       ">
-    <b>Q-Value Evaluation Prompt</b>"Your task is to estimate Q-values. Given a list of different observations and corresponding possible actions, please evaluate the Q-value of each action. The Q-value represents the expected cumulative reward obtained by taking that action in the current state and following the optimal policy thereafter. Please return a numeric score between 0.0 and 1.0 for each action, where:
+    <b>Q-Value Evaluation Prompt</b>
+    "Your task is to estimate Q-values. Given a list of different observations and corresponding possible actions, please evaluate the Q-value of each action. The Q-value represents the expected cumulative reward obtained by taking that action in the current state and following the optimal policy thereafter. Please return a numeric score between 0.0 and 1.0 for each action, where:
     - 1.0 indicates the highest possible expected utility toward achieving the goal.
     - 0.0 indicates no expected utility or a clearly wrong move.
     Return the values in dictionary format. Only return numeric values between 0.0 and 1.0. If an action appears nonsensical, assign it 0.0.
@@ -206,7 +290,9 @@
     Now generate Q values:
     {OBSERVATION TEMPLATE}
     Q values:"
-    <b>Observation Template</b>"[OBSERVATION]
+    
+    <b>Observation Template</b>
+    "[OBSERVATION]
 Goal: put 1 {obj1} on {surface}, put 1 {obj1} on {surface}.
 You are in {room}.
 You see {reachable objects}.
@@ -214,7 +300,9 @@ You are close to {reachable objects}.
 You are holding {grabable objects}.
 {grabable object} is on the {surface}.
 Previous Action: {action}"
-    <b>Q-Value Evaluation Prompt</b>"{
+    
+    <b>Q-Value Evaluation Prompt</b>
+    "{
 "walk cutleryfork": 0.2,
 "walk wineglass": 0.2,
 "walk plate": 0.0,
@@ -237,8 +325,7 @@ Previous Action: {action}"
       </div>
     </section>
 
-
-    
+    <!-- Prompt Examples -->
     <section>
       <h2>Prompt Examples and Explanation</h2>
       <pre style="background:#f3f3f3; padding:1rem; border-radius:8px; overflow-x:auto; white-space: pre-wrap;">
@@ -249,20 +336,6 @@ Previous Action: {action}"
       <p>
         Prompts are designed to encourage the LLM to provide structured value judgments rather than raw textual outputs.
         These linguistic Q-values are then integrated into the RL training loop for adaptive value shaping.
-      </p>
-    </section>
-
-
-    <!-- Prompts -->
-    <section>
-      <h2>Prompt Examples and Explanation</h2>
-      <pre style="background:#f3f3f3; padding:1rem; border-radius:8px; overflow-x:auto;">
-Prompt: "Given the current state and goal, estimate the expected Q-value for action 'move block to table'."
-Response: "Based on prior tasks, moving the block is a high-value action when goal proximity > 0.8. Estimated Q-value ≈ 0.92."
-      </pre>
-      <p class="caption">Example of linguistic Q-value estimation prompt used in VIAS.</p>
-      <p>
-        Prompts are designed to encourage the LLM to provide structured value judgments rather than raw textual outputs. These linguistic Q-values are then integrated into the RL training loop for adaptive value shaping.
       </p>
     </section>
   </main>
