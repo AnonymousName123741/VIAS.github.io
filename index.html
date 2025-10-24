@@ -96,49 +96,50 @@
       margin-bottom: 1.5rem;
     }
 
-    /* 伪代码样式 */
-    .pseudocode {
-      background-color: #f8f9fa;
-      border: 1px solid #e9ecef;
-      border-radius: 6px;
-      padding: 1.5rem;
+    /* 伪代码样式 - 与图片完全一致 */
+    .algorithm-container {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 20px;
       margin: 1.5rem 0;
-      font-family: 'Courier New', monospace;
-      font-size: 0.95rem;
-      line-height: 1.5;
-      overflow-x: auto;
+      font-family: 'Times New Roman', serif;
+      font-size: 10.5pt;
+      line-height: 1.3;
     }
 
     .algorithm-title {
       text-align: center;
       font-weight: bold;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      color: #003366;
+      font-size: 11pt;
+      margin-bottom: 15px;
     }
 
     .algorithm-line {
-      margin: 0.3rem 0;
+      margin: 4px 0;
+      font-family: 'Courier New', monospace;
     }
 
     .algorithm-keyword {
       font-weight: bold;
-      color: #d73a49;
     }
 
     .algorithm-comment {
-      color: #6a737d;
+      color: #666;
       font-style: italic;
     }
 
     .algorithm-label {
-      color: #6f42c1;
       font-weight: bold;
     }
 
-    .indent-1 { margin-left: 1rem; }
-    .indent-2 { margin-left: 2rem; }
-    .indent-3 { margin-left: 3rem; }
+    .indent-1 { margin-left: 20px; }
+    .indent-2 { margin-left: 40px; }
+    .indent-3 { margin-left: 60px; }
+
+    .algorithm-require {
+      margin-bottom: 10px;
+    }
 
     footer {
       background-color: #003366;
@@ -155,9 +156,9 @@
       section h2 {
         font-size: 1.2rem;
       }
-      .pseudocode {
-        padding: 1rem;
-        font-size: 0.9rem;
+      .algorithm-container {
+        padding: 15px;
+        font-size: 10pt;
       }
     }
   </style>
@@ -182,34 +183,104 @@
     <!-- VIAS Algorithm -->
     <section>
       <h2>VIAS Algorithm Pseudocode</h2>
-      <div class="pseudocode">
+      <div class="algorithm-container">
         <div class="algorithm-title">Algorithm 1: VIAS Algorithm</div>
-        <div class="algorithm-line"><span class="algorithm-keyword">REQUIRE</span>: Observation space $\mathcal{O}$, action space $\mathcal{A}$, discount factor $\gamma$, learning rate $\alpha$, heuristic weight $\beta$, total timesteps $T$</div>
         
-        <div class="algorithm-line"><span class="algorithm-keyword">STATE</span> <span class="algorithm-label">Initialization Phase</span> <span class="algorithm-comment">// line:initialization_start</span></div>
-        <div class="algorithm-line indent-1"><span class="algorithm-keyword">STATE</span> Initialize replay buffer $\mathcal{D}_{0}$</div>
-        <div class="algorithm-line indent-1"><span class="algorithm-keyword">FOR</span> each randomly generated observation $o_{i}$</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Query LLM with $o_{i}$ and candidate actions to obtain heuristic values $f$</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Store $(o_{i}, a, \_, \_, f)$ in $\mathcal{D}_{0}$</div>
-        <div class="algorithm-line indent-1"><span class="algorithm-keyword">ENDFOR</span></div>
-        <div class="algorithm-line indent-1"><span class="algorithm-keyword">STATE</span> Pre-train $Q(o,a;\theta)$ using supervised regression on $\mathcal{D}_{0}$ <span class="algorithm-comment">// line:initialization_end</span></div>
-        <div class="algorithm-line indent-1"><span class="algorithm-keyword">STATE</span> Initialize environment and main replay buffer $\mathcal{D}$</div>
+        <div class="algorithm-line algorithm-require">
+          <span class="algorithm-keyword">REQUIRE</span>: Observation space $\mathcal{O}$, action space $\mathcal{A}$, discount factor $\gamma$, learning rate $\alpha$, heuristic weight $\beta$, total timesteps $T$
+        </div>
         
-        <div class="algorithm-line"><span class="algorithm-keyword">STATE</span> <span class="algorithm-label">Training Phase</span> <span class="algorithm-comment">// line:training_start</span></div>
-        <div class="algorithm-line indent-1"><span class="algorithm-keyword">FOR</span> $t=1$ to $T$</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Select action $a$ using $\epsilon$-greedy policy from $Q$ and execute it</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Observe $r$, $o^{\prime}$</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">IF</span> $t\bmod M=0$</div>
-        <div class="algorithm-line indent-3"><span class="algorithm-keyword">STATE</span> Query LLM to obtain updated heuristic $f$</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">ENDIF</span></div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Store $(o,a,r,o^{\prime},f)$ in $\mathcal{D}$</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Sample mini-batch from $\mathcal{D}$ using prioritized experience replay</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> Update $Q$ using TD loss augmented with heuristic shaping</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">STATE</span> $o\gets o^{\prime}$</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">IF</span> episode done</div>
-        <div class="algorithm-line indent-3"><span class="algorithm-keyword">STATE</span> Reset environment</div>
-        <div class="algorithm-line indent-2"><span class="algorithm-keyword">ENDIF</span></div>
-        <div class="algorithm-line indent-1"><span class="algorithm-keyword">ENDFOR</span> <span class="algorithm-comment">// line:training_end</span></div>
+        <div class="algorithm-line">
+          <span class="algorithm-keyword">STATE</span> <span class="algorithm-label">Initialization Phase</span> <span class="algorithm-comment">// line:initialization_start</span>
+        </div>
+        
+        <div class="algorithm-line indent-1">
+          <span class="algorithm-keyword">STATE</span> Initialize replay buffer $\mathcal{D}_{0}$
+        </div>
+        
+        <div class="algorithm-line indent-1">
+          <span class="algorithm-keyword">FOR</span> each randomly generated observation $o_{i}$
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">STATE</span> Query LLM with $o_{i}$ and candidate actions to obtain heuristic values $f$
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">STATE</span> Store $(o_{i}, a, \_, \_, f)$ in $\mathcal{D}_{0}$
+        </div>
+        
+        <div class="algorithm-line indent-1">
+          <span class="algorithm-keyword">ENDFOR</span>
+        </div>
+        
+        <div class="algorithm-line indent-1">
+          <span class="algorithm-keyword">STATE</span> Pre-train $Q(o,a;\theta)$ using supervised regression on $\mathcal{D}_{0}$ <span class="algorithm-comment">// line:initialization_end</span>
+        </div>
+        
+        <div class="algorithm-line indent-1">
+          <span class="algorithm-keyword">STATE</span> Initialize environment and main replay buffer $\mathcal{D}$
+        </div>
+        
+        <div class="algorithm-line">
+          <span class="algorithm-keyword">STATE</span> <span class="algorithm-label">Training Phase</span> <span class="algorithm-comment">// line:training_start</span>
+        </div>
+        
+        <div class="algorithm-line indent-1">
+          <span class="algorithm-keyword">FOR</span> $t=1$ to $T$
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">STATE</span> Select action $a$ using $\epsilon$-greedy policy from $Q$ and execute it
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">STATE</span> Observe $r$, $o^{\prime}$
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">IF</span> $t\bmod M=0$
+        </div>
+        
+        <div class="algorithm-line indent-3">
+          <span class="algorithm-keyword">STATE</span> Query LLM to obtain updated heuristic $f$
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">ENDIF</span>
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">STATE</span> Store $(o,a,r,o^{\prime},f)$ in $\mathcal{D}$
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">STATE</span> Sample mini-batch from $\mathcal{D}$ using prioritized experience replay
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">STATE</span> Update $Q$ using TD loss augmented with heuristic shaping
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">STATE</span> $o\gets o^{\prime}$
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">IF</span> episode done
+        </div>
+        
+        <div class="algorithm-line indent-3">
+          <span class="algorithm-keyword">STATE</span> Reset environment
+        </div>
+        
+        <div class="algorithm-line indent-2">
+          <span class="algorithm-keyword">ENDIF</span>
+        </div>
+        
+        <div class="algorithm-line indent-1">
+          <span class="algorithm-keyword">ENDFOR</span> <span class="algorithm-comment">// line:training_end</span>
+        </div>
       </div>
       <p>
         The VIAS algorithm consists of two main phases: <strong>Initialization Phase</strong> and <strong>Training Phase</strong>. In the initialization phase, the algorithm pre-trains the Q-function using heuristic values obtained from the LLM. During the training phase, it periodically queries the LLM for updated heuristic values and uses them to shape the TD loss, enabling more efficient reinforcement learning.
