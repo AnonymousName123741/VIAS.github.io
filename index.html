@@ -247,10 +247,39 @@
     <!-- 其他部分保持不变 -->
     <!-- Images -->
     <section>
-      <h2>Figures and Explanations</h2>
-      <img src="algo.png" alt="VIAS Framework Overview" />
-      <p class="caption">Figure 1. Overview of the VIAS framework combining RL and LLM-based value shaping.</p>
-    </section>
+    <h2>Figures and Explanations</h2>
+    <div class="two-column-layout">
+        <!-- 左边：图片 -->
+        <div class="image-column">
+            <img src="algo.png" alt="VIAS Framework Overview" />
+            <p class="caption">Figure 1. Overview of the VIAS framework combining RL and LLM-based value shaping.</p>
+        </div>
+        
+        <!-- 右边：解释 -->
+        <div class="explanation-column">
+            <div class="explanation-content">
+                <h3>Framework Architecture</h3>
+                <p>The VIAS (Value Initialization and Adaptive Shaping) framework represents a novel approach to combining reinforcement learning with linguistic guidance from large language models.</p>
+                
+                <div class="explanation-point">
+                    <strong>Dual-Phase Learning:</strong> The framework operates in two main phases: initialization for pre-training with LLM heuristics, and training with adaptive value shaping.
+                </div>
+
+                <div class="explanation-point">
+                    <strong>Language-Guided Value Estimation:</strong> Unlike traditional RL methods, VIAS uses linguistic feedback to inform value estimates, leveraging the commonsense reasoning capabilities of LLMs.
+                </div>
+
+                <div class="explanation-point">
+                    <strong>Sample Efficiency:</strong> By providing informed initialization and continuous guidance, VIAS significantly improves sample efficiency compared to standard RL approaches.
+                </div>
+
+                <div class="explanation-point">
+                    <strong>Real-World Applicability:</strong> The framework has been validated on real robot platforms, demonstrating practical utility in complex manipulation tasks.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
     <section>
       <h2>Figures and Explanations</h2>
