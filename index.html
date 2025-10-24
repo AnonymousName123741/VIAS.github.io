@@ -175,7 +175,7 @@
         line-height: 1.5;
         overflow-x: auto;
       ">
-    Your task is to estimate Q-values. Given a list of different observations and corresponding possible actions, please evaluate the Q-value of each action. The Q-value represents the expected cumulative reward obtained by taking that action in the current state and following the optimal policy thereafter. Please return a numeric score between 0.0 and 1.0 for each action, where:
+    <b>Q-Value Evaluation Prompt</b>"Your task is to estimate Q-values. Given a list of different observations and corresponding possible actions, please evaluate the Q-value of each action. The Q-value represents the expected cumulative reward obtained by taking that action in the current state and following the optimal policy thereafter. Please return a numeric score between 0.0 and 1.0 for each action, where:
     - 1.0 indicates the highest possible expected utility toward achieving the goal.
     - 0.0 indicates no expected utility or a clearly wrong move.
     Return the values in dictionary format. Only return numeric values between 0.0 and 1.0. If an action appears nonsensical, assign it 0.0.
@@ -205,7 +205,35 @@
     {EXAMPLES}
     Now generate Q values:
     {OBSERVATION TEMPLATE}
-    Q values:
+    Q values:"
+    <b>Observation Template</b>"[OBSERVATION]
+Goal: put 1 {obj1} on {surface}, put 1 {obj1} on {surface}.
+You are in {room}.
+You see {reachable objects}.
+You are close to {reachable objects}.
+You are holding {grabable objects}.
+{grabable object} is on the {surface}.
+Previous Action: {action}"
+    <b>Q-Value Evaluation Prompt</b>"{
+"walk cutleryfork": 0.2,
+"walk wineglass": 0.2,
+"walk plate": 0.0,
+"walk kitchentable": 0.8,
+"walk kitchencounter": 0.1,
+"walk kitchen": 0.0,
+"walk bathroom": 0.0,
+"walk bedroom": 0.0,
+"walk livingroom": 0.0,
+"grab cutleryfork": 1.0,
+"grab wineglass": 1.0,
+"grab plate": 0.0,
+"putback cutleryfork kitchencounter": 0.0,
+"putback wineglass kitchencounter": 0.0,
+"putback plate kitchencounter": 0.0,
+"putback cutleryfork kitchentable": 0.0,
+"putback wineglass kitchentable": 0.0,
+"putback plate kitchentable": 0.0
+}"
       </div>
     </section>
 
