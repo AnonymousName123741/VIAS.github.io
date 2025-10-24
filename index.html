@@ -80,10 +80,9 @@
       color: white;
     }
 
+    /* 图片基础样式 */
     img {
       display: block;
-      margin: 1rem auto;
-      max-width: 100%;
       border-radius: 6px;
       border: 1px solid #ccc;
     }
@@ -92,8 +91,8 @@
       text-align: center;
       font-size: 0.9rem;
       color: #555;
-      margin-top: -0.5rem;
-      margin-bottom: 1.5rem;
+      margin-top: 10px;
+      margin-bottom: 0;
     }
 
     /* 左右分栏布局 */
@@ -101,11 +100,15 @@
       display: flex;
       gap: 2rem;
       margin: 1.5rem 0;
+      align-items: flex-start;
     }
 
-    .algorithm-column {
+    .image-column {
       flex: 1;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .explanation-column {
@@ -113,7 +116,26 @@
       min-width: 0;
     }
 
-    /* 伪代码样式 - 与图片完全一致 */
+    /* 特定图片尺寸控制 */
+    .algo-image {
+      width: 100%;
+      max-width: 350px; /* algo.png 的尺寸 */
+      height: auto;
+    }
+
+    .para-image {
+      width: 100%;
+      max-width: 400px; /* para.png 的尺寸 */
+      height: auto;
+    }
+
+    .normal-image {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* 伪代码样式 */
     .algorithm-container {
       background-color: white;
       border: 1px solid #ddd;
@@ -197,7 +219,7 @@
         gap: 1rem;
       }
       
-      .algorithm-column,
+      .image-column,
       .explanation-column {
         width: 100%;
       }
@@ -213,6 +235,11 @@
       .algorithm-container {
         padding: 15px;
         font-size: 10pt;
+      }
+      
+      .algo-image,
+      .para-image {
+        max-width: 100%;
       }
     }
   </style>
@@ -244,14 +271,13 @@
       </p>
     </section>
 
-    <!-- 其他部分保持不变 -->
-    <!-- Images -->
+    <!-- VIAS Framework Overview Image -->
     <section>
-    <h2>Figures and Explanations</h2>
-    <div class="two-column-layout">
+      <h2>VIAS Framework Overview</h2>
+      <div class="two-column-layout">
         <!-- 左边：图片 -->
         <div class="image-column">
-            <img src="algo.png" alt="VIAS Framework Overview" />
+            <img src="algo.png" alt="VIAS Framework Overview" class="algo-image" />
             <p class="caption">Figure 1. Overview of the VIAS framework combining RL and LLM-based value shaping.</p>
         </div>
         
@@ -278,19 +304,50 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-    <section>
-      <h2>Figures and Explanations</h2>
-      <img src="para.png" alt="Parameter Analysis" />
-      <p class="caption">Figure 2. Parameter analysis and sensitivity studies.</p>
+      </div>
     </section>
 
+    <!-- Parameter Analysis Image -->
     <section>
-      <h2>Figures and Explanations</h2>
-      <img src="3d.png" alt="3D Visualization" />
-      <p class="caption">Figure 3. 3D visualization of the value shaping process.</p>
+      <h2>Parameter Analysis</h2>
+      <div class="two-column-layout">
+        <!-- 左边：图片 -->
+        <div class="image-column">
+            <img src="para.png" alt="Parameter Analysis" class="para-image" />
+            <p class="caption">Figure 2. Parameter analysis and sensitivity studies of the VIAS framework.</p>
+        </div>
+        
+        <!-- 右边：解释 -->
+        <div class="explanation-column">
+            <div class="explanation-content">
+                <h3>Parameter Sensitivity Analysis</h3>
+                <p>This analysis examines the sensitivity of VIAS performance to various hyperparameters and configuration choices.</p>
+                
+                <div class="explanation-point">
+                    <strong>Heuristic Weight (β):</strong> Controls the influence of LLM-derived heuristic values on the TD loss. Optimal values balance between linguistic guidance and empirical learning.
+                </div>
+
+                <div class="explanation-point">
+                    <strong>Update Frequency (M):</strong> Determines how frequently the LLM is queried for updated heuristic values. More frequent updates provide better guidance but increase computational cost.
+                </div>
+
+                <div class="explanation-point">
+                    <strong>Learning Rate (α):</strong> Affects the convergence speed and stability of the Q-function updates. Proper tuning is crucial for stable learning.
+                </div>
+
+                <div class="explanation-point">
+                    <strong>Discount Factor (γ):</strong> Influences the agent's planning horizon and the importance of future rewards in value estimation.
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3D Visualization Image -->
+    <section>
+      <h2>3D Visualization</h2>
+      <img src="3d.png" alt="3D Visualization" class="normal-image" />
+      <p class="caption">Figure 3. 3D visualization of the value shaping process in VIAS.</p>
     </section>
 
     <!-- Q-Value Evaluation Prompt -->
