@@ -84,7 +84,6 @@
     img {
       display: block;
       border-radius: 6px;
-      border: 1px solid #ccc;
     }
 
     .caption {
@@ -121,23 +120,26 @@
       min-width: 0;
     }
 
-    /* 特定图片尺寸控制 */
+    /* 特定图片尺寸控制 - 去掉边框 */
     .algo-image {
       width: 100%;
       max-width: 350px;
       height: auto;
+      border: none; /* 去掉边框 */
     }
 
     .para-image {
       width: 100%;
       max-width: 400px;
       height: auto;
+      border: none; /* 去掉边框 */
     }
 
     .normal-image {
       width: 100%;
       max-width: 100%;
       height: auto;
+      border: none; /* 去掉边框 */
     }
 
     /* Prompt内容样式 */
