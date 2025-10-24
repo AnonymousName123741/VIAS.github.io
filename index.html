@@ -163,82 +163,67 @@
       <p class="caption">Figure 3ue shaping.</p>
     </section>
 
+    <section>
+      <h2>Q-Value Evaluation Prompt</h2>
+      <div style="
+        border: 1px solid #ccc; 
+        background-color: #f9f9f9; 
+        padding: 16px; 
+        border-radius: 6px; 
+        font-family: 'Courier New', monospace; 
+        white-space: pre-wrap;
+        line-height: 1.5;
+        overflow-x: auto;
+      ">
+    Your task is to estimate Q-values. Given a list of different observations and corresponding possible actions, please evaluate the Q-value of each action. The Q-value represents the expected cumulative reward obtained by taking that action in the current state and following the optimal policy thereafter. Please return a numeric score between 0.0 and 1.0 for each action, where:
+    - 1.0 indicates the highest possible expected utility toward achieving the goal.
+    - 0.0 indicates no expected utility or a clearly wrong move.
+    Return the values in dictionary format. Only return numeric values between 0.0 and 1.0. If an action appears nonsensical, assign it 0.0.
     
-    <!-- Table 1 -->
+    You may use commonsense spatial reasoning. If a goal involves placing an object on a specific surface, you can infer which intermediate steps (e.g., walking to, grabbing) are needed to accomplish the goal. An object must be near you to grab it. You must be holding an object to put it back on another surface.
+    
+    [VALID ACTIONS]
+    - walk cutleryfork
+    - walk wineglass
+    - walk plate
+    - walk kitchentable
+    - walk kitchencounter
+    - walk kitchen
+    - walk bathroom
+    - walk bedroom
+    - walk livingroom
+    - grab cutleryfork
+    - grab wineglass
+    - grab plate
+    - putback cutleryfork kitchencounter
+    - putback wineglass kitchencounter
+    - putback plate kitchencounter
+    - putback cutleryfork kitchentable
+    - putback wineglass kitchentable
+    - putback plate kitchentable
+    
+    {EXAMPLES}
+    Now generate Q values:
+    {OBSERVATION TEMPLATE}
+    Q values:
+      </div>
+    </section>
+
+
+    
     <section>
-      <h2>Table 1: Task Performance Results</h2>
-      <table>
-        <tr>
-          <th>Environment</th>
-          <th>Baseline (TDQN)</th>
-          <th>LLM-guided RL</th>
-          <th>VIAS (Ours)</th>
-        </tr>
-        <tr>
-          <td>BlocksWorld</td>
-          <td>72%</td>
-          <td>81%</td>
-          <td><b>89%</b></td>
-        </tr>
-        <tr>
-          <td>VirtualHome</td>
-          <td>64%</td>
-          <td>78%</td>
-          <td><b>87%</b></td>
-        </tr>
-        <tr>
-          <td>Robot Arm</td>
-          <td>58%</td>
-          <td>74%</td>
-          <td><b>85%</b></td>
-        </tr>
-      </table>
-      <p class="caption">Table 1. Comparison of task completion rates across different methods.</p>
+      <h2>Prompt Examples and Explanation</h2>
+      <pre style="background:#f3f3f3; padding:1rem; border-radius:8px; overflow-x:auto; white-space: pre-wrap;">
+    <b>Prompt:</b> "Given the current state and goal, <strong>Your task is to estimate Q-values</strong> for action 'move block to table'."
+    <b>Response:</b> "Based on prior tasks, moving the block is a high-value action when goal proximity &gt; 0.8. Estimated Q-value ≈ 0.92."
+      </pre>
+      <p class="caption">Example of linguistic Q-value estimation prompt used in VIAS.</p>
       <p>
-        VIAS achieves the highest task completion rate across all environments, demonstrating the effectiveness of integrating linguistic value guidance into reinforcement learning.
+        Prompts are designed to encourage the LLM to provide structured value judgments rather than raw textual outputs.
+        These linguistic Q-values are then integrated into the RL training loop for adaptive value shaping.
       </p>
     </section>
 
-    <!-- Table 2 -->
-    <section>
-      <h2>Table 2: Training Efficiency Comparison</h2>
-      <table>
-        <tr>
-          <th>Method</th>
-          <th>Episodes to Convergence</th>
-          <th>Sample Efficiency Improvement</th>
-        </tr>
-        <tr>
-          <td>TDQN</td>
-          <td>4500</td>
-          <td>–</td>
-        </tr>
-        <tr>
-          <td>LLM-Guided RL</td>
-          <td>3100</td>
-          <td>+31%</td>
-        </tr>
-        <tr>
-          <td>VIAS (Ours)</td>
-          <td><b>2200</b></td>
-          <td><b>+51%</b></td>
-        </tr>
-      </table>
-      <p class="caption">Table 2. VIAS improves training efficiency by using linguistic initialization and adaptive shaping.</p>
-    </section>
-
-    <!-- Images -->
-    <section>
-      <h2>Figures and Explanations</h2>
-      <img src="images/architecture.png" alt="Architecture Diagram" />
-      <p class="caption">Figure 1. Overview of the VIAS framework combining RL and LLM-based value shaping.</p>
-
-      <img src="images/results_comparison.png" alt="Results Comparison" />
-      <p class="caption">Figure 2. Learning curves comparison among TDQN, LLM-guided RL, and VIAS.</p>
-      <p>
-        The figures above visualize the proposed architecture and the learning performance comparison. VIAS achieves faster convergence and higher stability across tasks, highlighting the importance of linguistic feedback in value estimation.
-      </p>
-    </section>
 
     <!-- Prompts -->
     <section>
