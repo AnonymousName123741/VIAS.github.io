@@ -247,42 +247,34 @@
 
     <!-- Video -->
     <section>
-      <h2>Video Demonstration of Real Robots Experiments with VIAS</h2>
+      <h2>Video Demonstration of Real Robot Experiments with VIAS</h2>
       <iframe width="720" height="405" src="https://www.youtube.com/embed/l7xpJGB_HDQ" allowfullscreen></iframe>
       <p class="caption">Video 1. Demonstration of VIAS performance in robot experiments.</p>
       <p>
-        This video demonstrates the learning process and task completion results of the VIAS framework.To validate the proposed approach in a real-world scenario, we conducted a real-robot experiment using a mobile manipulator tasked with setting up a table according to a specified goal. The mobile manipulator used in this demonstration consists of a Segway base for navigation, a UR5e robotic arm equipped with a Hand-E gripper mounted on the Segway base for manipulation, and an overhead RGB-D camera fixed relative to the robot for perception. This setup provides the robot with the capabilities to perceive its environment, navigate within it, and interact with objects effectively.
+        This video demonstrates the learning process and task completion results of Robot completing the goal:"Goal: put plate on kitchentable and then put cup on kitchentablethe" with VIAS framework. To validate the proposed approach in a real-world scenario, we conducted a real-robot experiment using a mobile manipulator tasked with setting up a table according to a specified goal. The mobile manipulator used in this demonstration consists of a Segway base for navigation, a UR5e robotic arm equipped with a Hand-E gripper mounted on the Segway base for manipulation, and an overhead RGB-D camera fixed relative to the robot for perception. This setup provides the robot with the capabilities to perceive its environment, navigate within it, and interact with objects effectively.
       </p>
     </section>
 
     <!-- VIAS Framework Overview Image -->
     <section>
-      <h2>VIAS Framework Overview</h2>
+      <h2>VIAS Algorithm</h2>
       <div class="two-column-layout">
         <div class="image-column">
             <img src="algo.png" alt="VIAS Framework Overview" class="algo-image" />
-            <p class="caption">Figure 1. Overview of the VIAS framework combining RL and LLM-based value shaping.</p>
+            <p class="caption">Algorithm 1. Full procedure of VIAS, consisting of an initialization stage where a Q-network is pre-trained using LLM-generated heuristic values, followed by a standard deep Q-learning phase enhanced with ongoing LLM-based shaping.</p>
         </div>
         
         <div class="explanation-column">
             <div class="explanation-content">
                 <h3>Framework Architecture</h3>
-                <p>The VIAS (Value Initialization and Adaptive Shaping) framework represents a novel approach to combining reinforcement learning with linguistic guidance from large language models.</p>
+                <p>Algorithm 1 outlines the full procedure for VIAS, consisting of an initialization stage where a Q-network is pre-trained using LLM-generated heuristic values, followed by a standard deep Q-learning phase enhanced with ongoing LLM-based shaping.</p>
                 
                 <div class="explanation-point">
-                    <strong>Dual-Phase Learning:</strong> The framework operates in two main phases: initialization for pre-training with LLM heuristics, and training with adaptive value shaping.
+                    In the <strong>Initialization Phase</strong> (Lines 1–7), we begin by setting up an empty initial replay buffer D0. This buffer is used to store observation-action pairs along with their corresponding heuristic values obtained from the LLM before training. For each observation-action pair (o, a) collected before the training starts, the algorithm queries the LLM to obtain a heuristic value f . This heuristic value represents the LLM’s estimated cumulative reward for taking action a in observation o. The tuple (o, a, f ) is then stored in the initial replay buffer D0. Subsequently, the algorithm initializes the Q-value function Q(o, a; θ) by minimizing the pre-training loss function L0(θ).
                 </div>
 
                 <div class="explanation-point">
-                    <strong>Language-Guided Value Estimation:</strong> Unlike traditional RL methods, VIAS uses linguistic feedback to inform value estimates, leveraging the commonsense reasoning capabilities of LLMs.
-                </div>
-
-                <div class="explanation-point">
-                    <strong>Sample Efficiency:</strong> By providing informed initialization and continuous guidance, VIAS significantly improves sample efficiency compared to standard RL approaches.
-                </div>
-
-                <div class="explanation-point">
-                    <strong>Real-World Applicability:</strong> The framework has been validated on real robot platforms, demonstrating practical utility in complex manipulation tasks.
+                    In the <strong>Training Phase</strong> (Lines 9–23), we train the agent over T timesteps. As in the initialization phase, VIAS initializes a replay buffer D. At each time step within an episode, the agent selects an action a based on the current Q-values Q(o, a). This selection is typically performed using a policy derived from Q, such as the ϵ-greedy policy. In our experiment, we used a decayed ϵ-greedy policy over timesteps. The selected action a is then executed in the environment, resulting in the observation of an immediate reward r and the next observation o′. Querying the LLM to obtain a heuristic value f for the current observation-action pair, the agent stores the experience in the replay buffer D. A mini-batch of experiences is then sampled from the replay buffer D for training, using prioritized experience replay. The Q-value Q(o, a) is then updated by incorporating both the TD error and the heuristic adjustment from the LLM. When the agent achieves the goal, the environment is initialized by setting the initial observation o.
                 </div>
             </div>
         </div>
@@ -291,7 +283,7 @@
 
     <!-- Parameter Analysis Image -->
     <section>
-      <h2>Parameter Analysis</h2>
+      <h2>TABLE IV KEY HYPERPARAMETERS USED IN VIAS</h2>
       <div class="two-column-layout">
         <div class="image-column">
             <img src="para.png" alt="Parameter Analysis" class="para-image" />
@@ -301,23 +293,7 @@
         <div class="explanation-column">
             <div class="explanation-content">
                 <h3>Parameter Sensitivity Analysis</h3>
-                <p>This analysis examines the sensitivity of VIAS performance to various hyperparameters and configuration choices.</p>
-                
-                <div class="explanation-point">
-                    <strong>Heuristic Weight (β):</strong> Controls the influence of LLM-derived heuristic values on the TD loss. Optimal values balance between linguistic guidance and empirical learning.
-                </div>
-
-                <div class="explanation-point">
-                    <strong>Update Frequency (M):</strong> Determines how frequently the LLM is queried for updated heuristic values. More frequent updates provide better guidance but increase computational cost.
-                </div>
-
-                <div class="explanation-point">
-                    <strong>Learning Rate (α):</strong> Affects the convergence speed and stability of the Q-function updates. Proper tuning is crucial for stable learning.
-                </div>
-
-                <div class="explanation-point">
-                    <strong>Discount Factor (γ):</strong> Influences the agent's planning horizon and the importance of future rewards in value estimation.
-                </div>
+                <p>Table IV summarizes the key hyperparameters used in our VIAS implementation based on the QVIAS agent. We highlight components that are particularly relevant to the integration of Large Language Model (LLM) feedback and TDQN.</p>
             </div>
         </div>
       </div>
