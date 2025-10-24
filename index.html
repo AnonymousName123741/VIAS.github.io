@@ -306,15 +306,6 @@
                     <strong>Training Phase (Lines 9–23)</strong>
                     We train the agent over T timesteps. As in the initialization phase, VIAS initializes a replay buffer D. At each time step within an episode, the agent selects an action a based on the current Q-values Q(o, a). This selection is typically performed using a policy derived from Q, such as the ϵ-greedy policy. In our experiment, we used a decayed ϵ-greedy policy over timesteps. The selected action a is then executed in the environment, resulting in the observation of an immediate reward r and the next observation o′. Querying the LLM to obtain a heuristic value f for the current observation-action pair, the agent stores the experience in the replay buffer D. A mini-batch of experiences is then sampled from the replay buffer D for training, using prioritized experience replay. The Q-value Q(o, a) is then updated by incorporating both the TD error and the heuristic adjustment from the LLM. When the agent achieves the goal, the environment is initialized by setting the initial observation o.
                 </div>
-
-                <div class="explanation-point">
-                    <strong>Key Components</strong>
-                    • <strong>LLM Integration:</strong> Uses language models as external critics to provide heuristic values<br>
-                    • <strong>Value Shaping:</strong> Augments TD loss with linguistic guidance<br>
-                    • <strong>Adaptive Updates:</strong> Periodic LLM queries maintain relevance<br>
-                    • <strong>Sample Efficiency:</strong> Informed initialization accelerates learning<br>
-                    • <strong>Prioritized Replay:</strong> Focuses learning on valuable experiences
-                </div>
             </div>
         </div>
       </div>
@@ -322,7 +313,7 @@
 
     <!-- Parameter Analysis Image -->
     <section>
-      <h2>TABLE IV. KEY HYPERPARAMETERS USED IN VIAS</h2>
+      <h2>TABLE IV. Key Hyperparameters Used in VIAS</h2>
       <div class="two-column-layout">
         <div class="image-column">
             <img src="para.png" alt="Parameter Analysis" class="para-image" />
@@ -331,7 +322,7 @@
         
         <div class="explanation-column">
             <div class="explanation-content">
-                <h3>Parameter Sensitivity Analysis</h3>
+               
                 <p>Table IV summarizes the key hyperparameters used in our VIAS implementation based on the QVIAS agent. We highlight components that are particularly relevant to the integration of Large Language Model (LLM) feedback and TDQN.</p>
             </div>
         </div>
